@@ -1,49 +1,26 @@
 data = open('input.txt', mode='r', encoding='utf-8').read().split('\n')
 output = 0
-
-
+number = ''
+use_number = False
+s
 for l in range(len(data)):
-    numbers = []
-    number_indexes = []
+    line = data[l]
 
-    number = ''
-    start_index = [0, 0]
-    
-    for c in range(len(data[l])):
-        if data[l][c].isnumeric():
-            if number == '':
-                start_index = [l, c]
+    for c in range(len(line)):
+        if line[c].isnumeric():
+            number += line[c]
 
-            number += data[l][c]
+            for j in [-1, 0, 1]:
+                for k in [-1, 0, 1]:
+                    if (0 <= l + j < len(data)) and (0 <= c + k < len(line)):
+                        if not data[l + j][c + k].isnumeric() and data[l + j][c + k] != '.':
+                            use_number = True
 
-        elif number != '' and not data[l][c].isnumeric():
-            numbers.append(number)
-            
-            for i in range(len(number)):
-                number_indexes.append([start_index[0], start_index[1] + i])
-            
+        elif not line[c].isnumeric() or c == len(line) - 1:
+            if use_number:
+                output += int(number)
+                
+            use_number = False
             number = ''
-    
-    start_index = 0
-    for number in numbers:
-        indexes = []
-
-        for i in range(len(number)):
-            indexes.append(number_indexes[i + start_index])
-
-        start_index += len(number)
-
-        number_works = False
-        for index in indexes:
-            for i in [-1, 0, 1]:
-                for j in [-1, 0, 1]:
-                    try:
-                        if not data[index[0]+i][index[1]+j].isnumeric() and data[index[0]+i][index[1]+j] != '.':
-                            number_works = True
-                    except:
-                        print('lmao')
-        
-        if number_works:
-            output += int(number)
 
 print(output)
